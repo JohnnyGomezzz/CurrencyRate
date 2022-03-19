@@ -24,6 +24,7 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity {
 
     private TextView textView;
+    private TextView dateView;
     private ProgressDialog pd;
     private final String JSON = "https://www.cbr-xml-daily.ru/daily_json.js";
 
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         textView = findViewById(R.id.list);
+        dateView = findViewById(R.id.date);
 
         new JsonTask().execute(JSON);
 
@@ -75,6 +77,10 @@ public class MainActivity extends AppCompatActivity {
 
     public String getAllValues(Page page) {
         return page.codes.values().toString().replaceAll("(^\\[|\\]$)", "");
+    }
+
+    public String getCurrentDate(Page page) {
+        return page.date;
     }
 
     private class JsonTask extends AsyncTask<String, String, String> {
@@ -143,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
             Gson gson = new Gson();
             Page page = gson.fromJson(result, Page.class);
 
-            textView.setText(getCurrencyValue(page, "BYN"));
+            dateView.setText(getCurrentDate(page));
             textView.setText(getAllValues(page));
         }
     }
