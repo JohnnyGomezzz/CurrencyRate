@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -19,6 +20,7 @@ import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
@@ -80,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public String getCurrentDate(Page page) {
-        return page.date;
+        return String.format(page.date, new SimpleDateFormat("d, MMMM, yyyy"));
     }
 
     private class JsonTask extends AsyncTask<String, String, String> {
