@@ -2,26 +2,24 @@ package ru.johnnygomezzz.currencyrate;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.format.DateFormat;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.google.gson.annotations.SerializedName;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,51 +36,17 @@ public class MainActivity extends AppCompatActivity {
         textView = findViewById(R.id.list);
         dateView = findViewById(R.id.date);
 
+        initConverterButtonOnClickListener();
+
         new JsonTask().execute(JSON);
-
     }
 
-    public class Page {
-        @SerializedName("Date")
-        public String date;
-
-        @SerializedName("Valute")
-        public Map<String, Valute> codes;
-    }
-
-    public class Valute {
-        @SerializedName("CharCode")
-        public String charCode;
-
-        @SerializedName("Nominal")
-        public Integer nominal;
-
-        @SerializedName("Name")
-        public String name;
-
-        @SerializedName("Value")
-        public Float value;
-
-        @Override
-        public String toString() {
-            return "\n" + value +
-                    " за " + nominal + " " + name;
-        }
-    }
-
-    public String getCurrencyValue(Page page, String code) {
-        return page.codes.get(code).name + " "
-                + page.codes.get(code).value.toString()
-                + " за " + page.codes.get(code).nominal
-                + " у.е.";
-    }
-
-    public String getAllValues(Page page) {
-        return page.codes.values().toString().replaceAll("(^\\[|\\]$)", "");
-    }
-
-    public String getCurrentDate(Page page) {
-        return String.format(page.date, new SimpleDateFormat("d, MMMM, yyyy"));
+    private void initConverterButtonOnClickListener() {
+        Button converterButton = findViewById(R.id.open_converter);
+        converterButton.setOnClickListener(view -> {
+            Intent converterIntent = new Intent(this, ConverterActivity.class);
+            startActivity(converterIntent);
+        });
     }
 
     private class JsonTask extends AsyncTask<String, String, String> {
@@ -112,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
                 reader = new BufferedReader(new InputStreamReader(stream));
 
                 StringBuffer buffer = new StringBuffer();
-                String line = "https://www.cbr-xml-daily.ru/daily_json.js";
+                String line = JSON;
 
                 while ((line = reader.readLine()) != null) {
                     buffer.append(line+"\n");
@@ -142,17 +106,19 @@ public class MainActivity extends AppCompatActivity {
             return null;
         }
 
+        @SuppressLint("SetTextI18n")
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             if (pd.isShowing()){
                 pd.dismiss();
             }
+            MainActivity mainActivity;
             Gson gson = new Gson();
-            Page page = gson.fromJson(result, Page.class);
+            Currency.Page page = gson.fromJson(result, Currency.Page.class);
 
-            dateView.setText(getCurrentDate(page));
-            textView.setText(getAllValues(page));
+            dateView.setText("Курс валют на " + Currency.getCurrentDate(page));
+            textView.setText(Currency.getAllValues(page));
         }
     }
 }
