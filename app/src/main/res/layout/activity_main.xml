@@ -11,25 +11,18 @@
         tools:context=".MainActivity">
 
         <Button
+            android:id="@+id/open_currency_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/currency_list_button"
+            />
+
+        <Button
             android:id="@+id/open_converter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/converter_button"
             />
-
-        <TextView
-            android:id="@+id/date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            />
-
-        <TextView
-            android:id="@+id/list"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
-
 
     </LinearLayout>
 </ScrollView>

@@ -31,7 +31,7 @@ public class Currency {
         @Override
         public String toString() {
             return "\n" + value +
-                    " за " + nominal + " " + name;
+                    " рублей за " + nominal + " " + name;
         }
     }
 
