@@ -2,6 +2,11 @@
     <string name="app_name">Currency Rate</string>
     <string name="converter_button">Конвертер</string>
     <string name="currency_list_button">Курс валют</string>
+    <string name="button_result">Посчитать</string>
+    <string name="text_1">Конвертер</string>
+    <string name="text_2">Введите сумму в рублях</string>
+    <string name="text_3">Выберите валюту</string>
+    <string name="hint_1">0</string>
     <string-array name="valute_codes">
         <item>AUD</item>
         <item>AZN</item>

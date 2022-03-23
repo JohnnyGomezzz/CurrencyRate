@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,7 +16,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 public class CurrencyListActivity extends AppCompatActivity {
@@ -64,11 +62,11 @@ public class CurrencyListActivity extends AppCompatActivity {
 
                 reader = new BufferedReader(new InputStreamReader(stream));
 
-                StringBuffer buffer = new StringBuffer();
-                String line = JSON;
+                StringBuilder buffer = new StringBuilder();
+                String line;
 
                 while ((line = reader.readLine()) != null) {
-                    buffer.append(line+"\n");
+                    buffer.append(line).append("\n");
                     Log.d("Response: ", "> " + line);
 
                 }
@@ -76,8 +74,6 @@ public class CurrencyListActivity extends AppCompatActivity {
                 return buffer.toString();
 
 
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
