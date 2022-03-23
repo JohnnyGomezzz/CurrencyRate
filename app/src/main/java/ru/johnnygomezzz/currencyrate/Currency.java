@@ -3,7 +3,10 @@ package ru.johnnygomezzz.currencyrate;
 import com.google.gson.annotations.SerializedName;
 
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class Currency {
 
@@ -35,11 +38,22 @@ public class Currency {
         }
     }
 
-    public String getCurrencyValue(Page page, String code) {
-        return page.codes.get(code).name + " "
-                + page.codes.get(code).value.toString()
-                + " за " + page.codes.get(code).nominal
-                + " у.е.";
+    public Float getCurrencyValue(Page page, String code) {
+        return Objects.requireNonNull(page.codes.get(code)).value;
+    }
+
+    public String getCurrencyCode(Page page, String code) {
+        return Objects.requireNonNull(page.codes.get(code)).charCode;
+    }
+
+    public static Map<String, Float> getCodesValuesList(Page page) {
+        Map<String, Float> codesValues = new HashMap<>();
+
+        for (Map.Entry<String, Valute> entry : page.codes.entrySet()) {
+            Valute number = entry.getValue();
+            codesValues.put(number.charCode, number.value);
+        }
+        return codesValues;
     }
 
     public static String getAllValues(Page page) {

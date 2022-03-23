@@ -2,15 +2,22 @@ package ru.johnnygomezzz.currencyrate;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ConverterActivity extends AppCompatActivity {
+
+    public static final String EXTRA_LIST = "list";
+    private HashMap<String, Float> hashMap;
 
     private Spinner valutesList;
     private EditText sum;
@@ -21,9 +28,15 @@ public class ConverterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_converter);
 
+        Intent intent = getIntent();
+        hashMap = (HashMap<String, Float>)intent.getSerializableExtra("list");
+//        Log.v("HashMapTest", hashMap.get("NOK"));
+
         valutesList = findViewById(R.id.valutes_list);
         sum = findViewById(R.id.sum);
         result = findViewById(R.id.result_field);
+
+        result.setText(hashMap.toString());
 
         initResultButtonOnClickListener();
     }
@@ -32,11 +45,11 @@ public class ConverterActivity extends AppCompatActivity {
         Button resultButton = findViewById(R.id.button_result);
         resultButton.setOnClickListener(view -> {
             String valuteCode = String.valueOf(valutesList.getSelectedItem());
-            int rubleSum = Integer.parseInt(sum.getText().toString());
+            Float rubleSum = Float.parseFloat(sum.getText().toString());
 
-            String resultText = rubleSum + " / " + valuteCode;
+            Float resultText = rubleSum / hashMap.get(valuteCode);
 
-            result.setText(resultText);
+            result.setText(resultText.toString());
         });
     }
 }
