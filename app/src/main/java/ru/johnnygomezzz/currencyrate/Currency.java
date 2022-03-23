@@ -2,6 +2,7 @@ package ru.johnnygomezzz.currencyrate;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
@@ -46,15 +47,21 @@ public class Currency {
         return Objects.requireNonNull(page.codes.get(code)).charCode;
     }
 
-    public static Map<String, Float> getCodesValuesList(Page page) {
-        Map<String, Float> codesValues = new HashMap<>();
+    public static Map<String, BigDecimal> getCodesValuesList(Page page) {
+        Map<String, BigDecimal> codesValues = new HashMap<>();
 
         for (Map.Entry<String, Valute> entry : page.codes.entrySet()) {
             Valute number = entry.getValue();
-            codesValues.put(number.charCode, number.value);
+
+            BigDecimal value = new BigDecimal(Float.toString(number.value));
+            BigDecimal nominal = new BigDecimal(Float.toString(number.nominal));
+
+            codesValues.put(number.charCode, value.divide(nominal, 2));
         }
         return codesValues;
     }
+
+//    BigDecimal value = new BigDecimal(Float.toString(123.4f));
 
     public static String getAllValues(Page page) {
         return page.codes.values().toString().replaceAll("(^\\[|\\]$)", "");

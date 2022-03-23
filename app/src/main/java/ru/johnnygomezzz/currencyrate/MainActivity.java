@@ -17,6 +17,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -124,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
             Gson gson = new Gson();
             Currency.Page page = gson.fromJson(result, Currency.Page.class);
 
-            HashMap<String, Float> valutesValueList = new HashMap<>(Currency.getCodesValuesList(page));
+            HashMap<String, BigDecimal> valutesValueList = new HashMap<>(Currency.getCodesValuesList(page));
 
             Button converterButton = findViewById(R.id.open_converter);
             converterButton.setOnClickListener(view -> {

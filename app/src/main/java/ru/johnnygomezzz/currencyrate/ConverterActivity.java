@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +18,7 @@ import java.util.Map;
 public class ConverterActivity extends AppCompatActivity {
 
     public static final String EXTRA_LIST = "list";
-    private HashMap<String, Float> hashMap;
+    private HashMap<String, BigDecimal> hashMap;
 
     private Spinner valutesList;
     private EditText sum;
@@ -29,14 +30,12 @@ public class ConverterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_converter);
 
         Intent intent = getIntent();
-        hashMap = (HashMap<String, Float>)intent.getSerializableExtra("list");
+        hashMap = (HashMap<String, BigDecimal>)intent.getSerializableExtra("list");
 //        Log.v("HashMapTest", hashMap.get("NOK"));
 
         valutesList = findViewById(R.id.valutes_list);
         sum = findViewById(R.id.sum);
         result = findViewById(R.id.result_field);
-
-        result.setText(hashMap.toString());
 
         initResultButtonOnClickListener();
     }
@@ -45,9 +44,9 @@ public class ConverterActivity extends AppCompatActivity {
         Button resultButton = findViewById(R.id.button_result);
         resultButton.setOnClickListener(view -> {
             String valuteCode = String.valueOf(valutesList.getSelectedItem());
-            Float rubleSum = Float.parseFloat(sum.getText().toString());
+            BigDecimal rubleSum = new BigDecimal(sum.getText().toString());
 
-            Float resultText = rubleSum / hashMap.get(valuteCode);
+            BigDecimal resultText = rubleSum.divide(hashMap.get(valuteCode), 2, BigDecimal.ROUND_CEILING);
 
             result.setText(resultText.toString());
         });
