@@ -15,7 +15,7 @@ import java.util.HashMap;
 public class ConverterActivity extends AppCompatActivity {
 
     public static final String EXTRA_LIST = "list";
-    private HashMap<String, BigDecimal> hashMap;
+    private HashMap<String, BigDecimal> valutesMap;
 
     private Spinner valutesList;
     private EditText sum;
@@ -27,7 +27,7 @@ public class ConverterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_converter);
 
         Intent intent = getIntent();
-        hashMap = (HashMap<String, BigDecimal>)intent.getSerializableExtra("list");
+        valutesMap = (HashMap<String, BigDecimal>)intent.getSerializableExtra("list");
 
         valutesList = findViewById(R.id.valutes_list);
         sum = findViewById(R.id.sum);
@@ -42,8 +42,8 @@ public class ConverterActivity extends AppCompatActivity {
             String valuteCode = String.valueOf(valutesList.getSelectedItem());
             BigDecimal rubleSum = new BigDecimal(sum.getText().toString());
 
-            BigDecimal resultCount = rubleSum.divide(hashMap.get(valuteCode), 2, BigDecimal.ROUND_DOWN);
-            String resultText = "Вы сможете купить " + resultCount;
+            BigDecimal resultCount = rubleSum.divide(valutesMap.get(valuteCode), 2, BigDecimal.ROUND_DOWN);
+            String resultText = "Вы сможете купить " + resultCount + " " + valutesList.getSelectedItem();
 
             result.setText(resultText);
         });
