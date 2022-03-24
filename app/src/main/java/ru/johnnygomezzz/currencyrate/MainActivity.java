@@ -115,7 +115,6 @@ public class MainActivity extends AppCompatActivity {
             return null;
         }
 
-        @SuppressLint("SetTextI18n")
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
@@ -126,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
             Currency.Page page = gson.fromJson(result, Currency.Page.class);
 
             HashMap<String, BigDecimal> valutesValueList = new HashMap<>(Currency.getCodesValuesList(page));
+            String currencyDate = Currency.getCurrentDate(page);
 
             Button converterButton = findViewById(R.id.open_converter);
             converterButton.setOnClickListener(view -> {
@@ -134,8 +134,13 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(converterIntent);
             });
 
-//            dateView.setText("Курс валют на " + Currency.getCurrentDate(page));
-//            textView.setText(Currency.getAllValues(page));
+            Button currencyListButton = findViewById(R.id.open_currency_list);
+            currencyListButton.setOnClickListener(view -> {
+                Intent currencyListIntent = new Intent(MainActivity.this, CurrencyListActivity.class);
+                currencyListIntent.putExtra(CurrencyListActivity.EXTRA_LIST, valutesValueList);
+                currencyListIntent.putExtra(CurrencyListActivity.EXTRA_DATE, currencyDate);
+                startActivity(currencyListIntent);
+            });
         }
     }
 }

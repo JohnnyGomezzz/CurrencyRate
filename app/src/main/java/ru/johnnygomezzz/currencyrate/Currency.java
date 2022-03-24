@@ -5,7 +5,6 @@ import com.google.gson.annotations.SerializedName;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -43,10 +42,6 @@ public class Currency {
         return Objects.requireNonNull(page.codes.get(code)).value;
     }
 
-    public String getCurrencyCode(Page page, String code) {
-        return Objects.requireNonNull(page.codes.get(code)).charCode;
-    }
-
     public static Map<String, BigDecimal> getCodesValuesList(Page page) {
         Map<String, BigDecimal> codesValues = new HashMap<>();
 
@@ -56,19 +51,19 @@ public class Currency {
             BigDecimal value = new BigDecimal(Float.toString(number.value));
             BigDecimal nominal = new BigDecimal(Float.toString(number.nominal));
 
-            codesValues.put(number.charCode, value.divide(nominal, 2));
+            codesValues.put(number.charCode, value.setScale(2, BigDecimal.ROUND_DOWN)
+                    .divide(nominal, 2, BigDecimal.ROUND_DOWN));
         }
         return codesValues;
     }
-
-//    BigDecimal value = new BigDecimal(Float.toString(123.4f));
 
     public static String getAllValues(Page page) {
         return page.codes.values().toString().replaceAll("(^\\[|\\]$)", "");
     }
 
     public static String getCurrentDate(Page page) {
-        return String.format(page.date, new SimpleDateFormat("d, MMMM, yyyy"));
+        String date[] = page.date.split("T");
+        return date[0];
     }
 
 
