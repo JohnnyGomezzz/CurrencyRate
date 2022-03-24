@@ -42,9 +42,10 @@ public class ConverterActivity extends AppCompatActivity {
             String valuteCode = String.valueOf(valutesList.getSelectedItem());
             BigDecimal rubleSum = new BigDecimal(sum.getText().toString());
 
-            BigDecimal resultText = rubleSum.divide(hashMap.get(valuteCode), 2, BigDecimal.ROUND_DOWN);
+            BigDecimal resultCount = rubleSum.divide(hashMap.get(valuteCode), 2, BigDecimal.ROUND_DOWN);
+            String resultText = "Вы сможете купить " + resultCount;
 
-            result.setText(resultText.toString());
+            result.setText(resultText);
         });
     }
 }

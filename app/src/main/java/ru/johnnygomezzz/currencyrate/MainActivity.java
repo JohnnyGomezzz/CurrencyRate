@@ -2,14 +2,12 @@ package ru.johnnygomezzz.currencyrate;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.google.gson.Gson;
 
@@ -19,45 +17,20 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
     private ProgressDialog pd;
-    private final String JSON = "https://www.cbr-xml-daily.ru/daily_json.js";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        new JsonTask().execute(JSON);
-    }
-
-    private void initConverterButtonOnClickListener() {
-        Button converterButton = findViewById(R.id.open_converter);
-        converterButton.setOnClickListener(view -> {
-            startConverterIntent();
-        });
-    }
-
-    private void startConverterIntent() {
-        Intent converterIntent = new Intent(this, ConverterActivity.class);
-        startActivity(converterIntent);
-    }
-
-    private void startCurrencyListIntent() {
-        Intent currencyListIntent = new Intent(this, CurrencyListActivity.class);
-        startActivity(currencyListIntent);
-    }
-
-    private void initCurrencyListButtonOnClickListener() {
-        Button currencyListButton = findViewById(R.id.open_currency_list);
-        currencyListButton.setOnClickListener(view -> {
-            startCurrencyListIntent();
-        });
+        String json = "https://www.cbr-xml-daily.ru/daily_json.js";
+        new JsonTask().execute(json);
     }
 
     private class JsonTask extends AsyncTask<String, String, String> {
@@ -125,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
             Currency.Page page = gson.fromJson(result, Currency.Page.class);
 
             HashMap<String, BigDecimal> valutesValueList = new HashMap<>(Currency.getCodesValuesList(page));
+            HashMap<Float, String> namesValueList = new HashMap<>(Currency.getNamesValuesList(page));
             String currencyDate = Currency.getCurrentDate(page);
 
             Button converterButton = findViewById(R.id.open_converter);
@@ -137,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
             Button currencyListButton = findViewById(R.id.open_currency_list);
             currencyListButton.setOnClickListener(view -> {
                 Intent currencyListIntent = new Intent(MainActivity.this, CurrencyListActivity.class);
-                currencyListIntent.putExtra(CurrencyListActivity.EXTRA_LIST, valutesValueList);
+                currencyListIntent.putExtra(CurrencyListActivity.EXTRA_LIST, namesValueList);
                 currencyListIntent.putExtra(CurrencyListActivity.EXTRA_DATE, currencyDate);
                 startActivity(currencyListIntent);
             });
